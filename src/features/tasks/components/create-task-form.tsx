@@ -33,8 +33,8 @@ import {
 import { TaskStatus } from "../types";
 import { createTaskSchema } from "../schemas";
 import { useCreateTask } from "../api/use-create-task";
-
-import { Textarea } from "@/components/ui/textarea";
+import { useState } from "react";
+import { TaskDescription } from "./task-description";
 
 // import { TaskDescription } from "./task-description";
 
@@ -51,6 +51,7 @@ export const CreateTaskForm = ({
 }: CreateTaskFormProps) => {
   const workspaceId = useWorkspaceId();
   const { mutate, isPending } = useCreateTask();
+  const [desc, setDesc] = useState<string>("");
 
   const form = useForm<z.infer<typeof createTaskSchema>>({
     resolver: zodResolver(createTaskSchema.omit({ workspaceId: true })),
@@ -60,8 +61,9 @@ export const CreateTaskForm = ({
   });
 
   const onSubmit = (values: z.infer<typeof createTaskSchema>) => {
+    // console.log("first", { ...values, workspaceId, description: desc });
     mutate(
-      { json: { ...values, workspaceId } },
+      { json: { ...values, workspaceId, description: desc } },
       {
         onSuccess: () => {
           form.reset();
@@ -96,25 +98,7 @@ export const CreateTaskForm = ({
                   </FormItem>
                 )}
               />
-
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        className="h-30"
-                        {...field}
-                        placeholder="Enter task name"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
+              <TaskDescription desc={desc} setDesc={setDesc} />
               <FormField
                 control={form.control}
                 name="dueDate"
