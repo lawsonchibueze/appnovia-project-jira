@@ -34,13 +34,21 @@ import { TaskStatus } from "../types";
 import { createTaskSchema } from "../schemas";
 import { useCreateTask } from "../api/use-create-task";
 
+import { Textarea } from "@/components/ui/textarea";
+
+// import { TaskDescription } from "./task-description";
+
 interface CreateTaskFormProps {
   onCancel?: () => void;
-  projectOptions: { id: string, name: string, imageUrl: string }[];
-  memberOptions: { id: string, name: string }[];
-};
+  projectOptions: { id: string; name: string; imageUrl: string }[];
+  memberOptions: { id: string; name: string }[];
+}
 
-export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: CreateTaskFormProps) => {
+export const CreateTaskForm = ({
+  onCancel,
+  projectOptions,
+  memberOptions,
+}: CreateTaskFormProps) => {
   const workspaceId = useWorkspaceId();
   const { mutate, isPending } = useCreateTask();
 
@@ -52,20 +60,21 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
   });
 
   const onSubmit = (values: z.infer<typeof createTaskSchema>) => {
-    mutate({ json: { ...values, workspaceId } }, {
-      onSuccess: () => {
-        form.reset();
-        onCancel?.();
+    mutate(
+      { json: { ...values, workspaceId } },
+      {
+        onSuccess: () => {
+          form.reset();
+          onCancel?.();
+        },
       }
-    });
+    );
   };
 
   return (
     <Card className="w-full h-full border-none shadow-none">
       <CardHeader className="flex p-7">
-        <CardTitle className="text-xl font-bold">
-          Create a new task
-        </CardTitle>
+        <CardTitle className="text-xl font-bold">Create a new task</CardTitle>
       </CardHeader>
       <div className="px-7">
         <DottedSeparator />
@@ -79,11 +88,24 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Task Name
-                    </FormLabel>
+                    <FormLabel>Task Name</FormLabel>
                     <FormControl>
-                      <Input
+                      <Input {...field} placeholder="Enter task name" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        className="h-30"
                         {...field}
                         placeholder="Enter task name"
                       />
@@ -92,14 +114,13 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="dueDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Due Date
-                    </FormLabel>
+                    <FormLabel>Due Date</FormLabel>
                     <FormControl>
                       <DatePicker {...field} />
                     </FormControl>
@@ -112,9 +133,7 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
                 name="assigneeId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Assignee
-                    </FormLabel>
+                    <FormLabel>Assignee</FormLabel>
                     <Select
                       defaultValue={field.value}
                       onValueChange={field.onChange}
@@ -147,9 +166,7 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
                 name="status"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Status
-                    </FormLabel>
+                    <FormLabel>Status</FormLabel>
                     <Select
                       defaultValue={field.value}
                       onValueChange={field.onChange}
@@ -182,9 +199,7 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
                 name="projectId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Project
-                    </FormLabel>
+                    <FormLabel>Project</FormLabel>
                     <Select
                       defaultValue={field.value}
                       onValueChange={field.onChange}
@@ -226,11 +241,7 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
               >
                 Cancel
               </Button>
-              <Button
-                disabled={isPending}
-                type="submit"
-                size="lg"
-              >
+              <Button disabled={isPending} type="submit" size="lg">
                 Create Task
               </Button>
             </div>
