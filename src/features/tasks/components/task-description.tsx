@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { PencilIcon, XIcon } from "lucide-react";
+// import { useState } from "react";
+// import { PencilIcon, XIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { DottedSeparator } from "@/components/dotted-separator";
+// import { DottedSeparator } from "@/components/dotted-separator";
 
-import { Task } from "../types";
-import { useUpdateTask } from "../api/use-update-task";
+// import { Task } from "../types";
+// import { useUpdateTask } from "../api/use-update-task";
 
 interface TaskDescriptionProps {
   desc: string;
@@ -14,7 +14,7 @@ interface TaskDescriptionProps {
 }
 
 export const TaskDescription = ({ desc, setDesc }: TaskDescriptionProps) => {
-  const [isEditing, setIsEditing] = useState(false);
+  // const [isEditing, setIsEditing] = useState(false);
   // const [value, setValue] = useState(task.description);
 
   // const { mutate, isPending } = useUpdateTask();
