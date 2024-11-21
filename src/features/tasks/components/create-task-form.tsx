@@ -34,7 +34,7 @@ import { TaskStatus } from "../types";
 import { createTaskSchema } from "../schemas";
 import { useCreateTask } from "../api/use-create-task";
 import { useState } from "react";
-import { TaskDescription } from "./task-description";
+import { Description } from "./description";
 
 // import { TaskDescription } from "./task-description";
 
@@ -98,7 +98,7 @@ export const CreateTaskForm = ({
                   </FormItem>
                 )}
               />
-              <TaskDescription desc={desc} setDesc={setDesc} />
+              <Description desc={desc} setDesc={setDesc} />
               <FormField
                 control={form.control}
                 name="dueDate"
