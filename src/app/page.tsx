@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import NavbarHome from "@/components/navbarHome";
+// import NavbarHome from "@/components/navbarHome";
+import NavbarHome from "@/components/navbarhome";
 import {
   ChevronRight,
   Layout,
