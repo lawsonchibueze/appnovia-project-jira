@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import NavbarHome from "@/components/navbarHome";
 import {
   ChevronRight,
   Layout,
@@ -15,6 +16,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+
 // import CompanyCarousel from "@/components/company-carousel";
 
 const faqs = [
@@ -75,6 +77,7 @@ const features = [
 export default function Home() {
   return (
     <div className="min-h-screen">
+      <NavbarHome />
       {/* Hero Section */}
       <section className="container mx-auto py-20 text-center">
         <h1 className="text-6xl sm:text-7xl lg:text-8xl font-extrabold gradient-title pb-6 flex flex-col">
