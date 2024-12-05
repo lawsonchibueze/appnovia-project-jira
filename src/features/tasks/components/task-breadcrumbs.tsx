@@ -11,15 +11,18 @@ import { useConfirm } from "@/hooks/use-confirm";
 
 import { Task } from "../types";
 import { useDeleteTask } from "../api/use-delete-task";
+import { useGetMembers } from "@/features/members/api/use-get-members";
 
 interface TaskBreadcrumbsProps {
   project: Project;
   task: Task;
-};
+  user: any;
+}
 
 export const TaskBreadcrumbs = ({
   project,
-  task
+  task,
+  user,
 }: TaskBreadcrumbsProps) => {
   const router = useRouter();
   const workspaceId = useWorkspaceId();
@@ -30,16 +33,24 @@ export const TaskBreadcrumbs = ({
     "This action cannot be undone.",
     "destructive"
   );
+  const { data } = useGetMembers({ workspaceId });
+
+  const role = data?.documents?.filter(
+    (member: any) => member.userId === user.$id
+  );
 
   const handleDeleteTask = async () => {
     const ok = await confirm();
     if (!ok) return;
 
-    mutate({ param: { taskId: task.$id } }, {
-      onSuccess: () => {
-        router.push(`/workspaces/${workspaceId}/tasks`);
-      },
-    });
+    mutate(
+      { param: { taskId: task.$id } },
+      {
+        onSuccess: () => {
+          router.push(`/workspaces/${workspaceId}/tasks`);
+        },
+      }
+    );
   };
 
   return (
@@ -56,19 +67,19 @@ export const TaskBreadcrumbs = ({
         </p>
       </Link>
       <ChevronRightIcon className="size-4 lg:size-5 text-muted-foreground" />
-      <p className="text-sm lg:text-lg font-semibold">
-        {task.name}
-      </p>
-      <Button
-        onClick={handleDeleteTask}
-        disabled={isPending}
-        className="ml-auto"
-        variant="destructive"
-        size="sm"
-      >
-        <TrashIcon className="size-4 lg:mr-2" />
-        <span className="hidden lg:block">Delete Task</span>
-      </Button>
+      <p className="text-sm lg:text-lg font-semibold">{task.name}</p>
+      {role && role[0].role === "ADMIN" && (
+        <Button
+          onClick={handleDeleteTask}
+          disabled={isPending}
+          className="ml-auto"
+          variant="destructive"
+          size="sm"
+        >
+          <TrashIcon className="size-4 lg:mr-2" />
+          <span className="hidden lg:block">Delete Task</span>
+        </Button>
+      )}
     </div>
-  )
-}
+  );
+};

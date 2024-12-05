@@ -18,14 +18,14 @@ interface TaskActionsProps {
   id: string;
   projectId: string;
   children: React.ReactNode;
-};
+}
 
 export const TaskActions = ({ id, projectId, children }: TaskActionsProps) => {
   const workspaceId = useWorkspaceId();
   const router = useRouter();
 
   const { open } = useEditTaskModal();
-  
+
   const [ConfirmDialog, confirm] = useConfirm(
     "Delete task",
     "This action cannot be undone.",
@@ -47,14 +47,12 @@ export const TaskActions = ({ id, projectId, children }: TaskActionsProps) => {
   const onOpenProject = () => {
     router.push(`/workspaces/${workspaceId}/projects/${projectId}`);
   };
-  
+
   return (
     <div className="flex justify-end">
       <ConfirmDialog />
       <DropdownMenu modal={false}>
-        <DropdownMenuTrigger asChild>
-          {children}
-        </DropdownMenuTrigger>
+        <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
           <DropdownMenuItem
             onClick={onOpenTask}
@@ -70,7 +68,7 @@ export const TaskActions = ({ id, projectId, children }: TaskActionsProps) => {
             <ExternalLinkIcon className="size-4 mr-2 stroke-2" />
             Open Project
           </DropdownMenuItem>
-          <DropdownMenuItem
+          {/* <DropdownMenuItem
             onClick={() => open(id)}
             className="font-medium p-[10px]"
           >
@@ -84,7 +82,7 @@ export const TaskActions = ({ id, projectId, children }: TaskActionsProps) => {
           >
             <TrashIcon className="size-4 mr-2 stroke-2" />
             Delete Task
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

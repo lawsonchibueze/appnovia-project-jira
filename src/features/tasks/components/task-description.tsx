@@ -7,14 +7,24 @@ import { DottedSeparator } from "@/components/dotted-separator";
 
 import { Task } from "../types";
 import { useUpdateTask } from "../api/use-update-task";
+import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
+import { useGetMembers } from "@/features/members/api/use-get-members";
 
 interface TaskDescriptionProps {
   task: Task;
+  user: any;
 }
 
-export const TaskDescription = ({ task }: TaskDescriptionProps) => {
+export const TaskDescription = ({ task, user }: TaskDescriptionProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(task.description);
+
+  const workspaceId = useWorkspaceId();
+  const { data } = useGetMembers({ workspaceId });
+
+  const role = data?.documents?.filter(
+    (member: any) => member.userId === user.$id
+  );
 
   const { mutate, isPending } = useUpdateTask();
 
@@ -36,18 +46,20 @@ export const TaskDescription = ({ task }: TaskDescriptionProps) => {
     <div className="p-4 border rounded-lg">
       <div className="flex items-center justify-between">
         <p className="text-lg font-semibold">Overview</p>
-        <Button
-          onClick={() => setIsEditing((prev) => !prev)}
-          size="sm"
-          variant="secondary"
-        >
-          {isEditing ? (
-            <XIcon className="size-4 mr-2" />
-          ) : (
-            <PencilIcon className="size-4 mr-2" />
-          )}
-          {isEditing ? "Cancel" : "Edit"}
-        </Button>
+        {role && role[0].role === "ADMIN" && (
+          <Button
+            onClick={() => setIsEditing((prev) => !prev)}
+            size="sm"
+            variant="secondary"
+          >
+            {isEditing ? (
+              <XIcon className="size-4 mr-2" />
+            ) : (
+              <PencilIcon className="size-4 mr-2" />
+            )}
+            {isEditing ? "Cancel" : "Edit"}
+          </Button>
+        )}
       </div>
       <DottedSeparator className="my-4" />
       {isEditing ? (

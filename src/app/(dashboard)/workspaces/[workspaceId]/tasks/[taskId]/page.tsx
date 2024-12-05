@@ -8,7 +8,7 @@ const TaskIdPage = async () => {
   const user = await getCurrent();
   if (!user) redirect("/sign-in");
 
-  return <TaskIdClient />
+  return <TaskIdClient user={user} />;
 };
- 
+
 export default TaskIdPage;
